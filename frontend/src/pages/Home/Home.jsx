@@ -1,47 +1,45 @@
-// Home.jsx
-import { useState } from 'react';
-import { useFetchMovies } from "./useFetchMovies";
-import Movie from "./Movie";
+import { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './Home.css';
 
 function Home() {
-  const [movieName, setMovieName] = useState("");
-  const movies = useFetchMovies();
+  const [movieName, setMovieName] = useState('');
+  const [movies, setMovies] = useState([]);
 
-  const handleInputChange = (e) => {
-    setMovieName(e.target.value);
-  };
+  useEffect(() => {
+    const apiUrl = 'https://api.themoviedb.org/3/movie/popular?api_key=522d421671cf75c2cba341597d86403a';
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(movieName.toLowerCase())
-  );
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.results); // Stocke la liste des films dans le state
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des films :', error);
+      });
+  }, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <h1> 🎬 Catalogues des films </h1>
+        <input
+          type="text"
+          name="nom du film"
+          id="nom du film"
+          placeholder="Rechercher un film..."
+          value={movieName}
+          onChange={(e) => setMovieName(e.target.value)}
+        />
+        <p>Nom du film : {movieName}</p>
 
-        <div className="input-container">
-          <input
-            type="text"
-            value={movieName}
-            onChange={handleInputChange}
-            placeholder="Entrez le nom du film"
-            className="search-input"
-          />
-          <p>Nom du film : <strong>{movieName}</strong></p>
-        </div>
+        {/* 🔽 Liste des films populaires affichée ici */}
+        <ul>
+          {movies.map((movie) => (
+            <li key={movie.id}>{movie.title}</li>
+          ))}
+        </ul>
 
-        <div className="movies-grid">
-          {filteredMovies.length === 0 ? (
-            <p>Aucun résultat trouvé pour : <strong>{movieName}</strong></p>
-          ) : (
-            filteredMovies.map((movie) => (
-              <Movie key={movie.id} movie={movie} />
-            ))
-          )}
-        </div>
       </header>
     </div>
   );
