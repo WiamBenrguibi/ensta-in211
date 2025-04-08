@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+.movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.movie-card {
+  width: 200px;
+  text-align: center;
+  background: #222;
+  padding: 1rem;
+  border-radius: 8px;
+  color: white;
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 4px;
+}

@@ -1,23 +1,12 @@
 import { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import { useFetchMovies } from './useFetchMovies';
+import Movie from './Movie';
+
 import './Home.css';
 
 function Home() {
   const [movieName, setMovieName] = useState('');
-  const [movies, setMovies] = useState([]);
-
-  useEffect(() => {
-    const apiUrl = 'https://api.themoviedb.org/3/movie/popular?api_key=522d421671cf75c2cba341597d86403a';
-
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies(data.results); // Stocke la liste des films dans le state
-      })
-      .catch((error) => {
-        console.error('Erreur lors de la récupération des films :', error);
-      });
-  }, []);
+  const { movies, loading, error } = useFetchMovies();
 
   return (
     <div className="App">
@@ -33,13 +22,14 @@ function Home() {
         />
         <p>Nom du film : {movieName}</p>
 
-        {/* 🔽 Liste des films populaires affichée ici */}
-        <ul>
-          {movies.map((movie) => (
-            <li key={movie.id}>{movie.title}</li>
-          ))}
-        </ul>
+        {loading && <p>Chargement des films...</p>}
+        {error && <p>Une erreur est survenue </p>}
 
+        <div className="movie-list">
+        {movies.map((movie) => (
+          <Movie key={movie.id} movie={movie} />
+        ))}
+      </div>
       </header>
     </div>
   );
