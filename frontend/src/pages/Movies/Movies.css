@@ -1,0 +1,9 @@
+.Movies-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.Movies-container> :not(:last-child) {
+  margin-bottom: 20px;
+}

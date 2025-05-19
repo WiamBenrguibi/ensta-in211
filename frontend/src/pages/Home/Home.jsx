@@ -3,10 +3,12 @@ import { useFetchMovies } from './useFetchMovies';
 import Movie from './Movie';
 import logo from './logo.svg';
 import './Home.css';
+import { useNavigate } from "react-router";
 
 function Home() {
   const [movieName, setMovieName] = useState('');
   const { movies, loading, error } = useFetchMovies();
+  const navigate = useNavigate();
 
   const filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(movieName.toLowerCase())
@@ -16,6 +18,8 @@ function Home() {
     <div className="App">
       <header className="App-header">
         <h1> Catalogues des films </h1>
+
+        <button onClick={() => navigate("/movies")}> Ajouter un film</button>
         <input
           type="text"
           name="nom du film"
